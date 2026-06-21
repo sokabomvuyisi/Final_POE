@@ -83,9 +83,9 @@ namespace CybersecurityChatbot
             AppendBotMessage(
                 "What cybersecurity task would you like to add?\n\n" +
                 "Just type something like:\n" +
-                "  • 'Add task Enable two-factor authentication'\n" +
-                "  • 'Add task Review privacy settings'\n" +
-                "  • 'Add task Update all passwords'\n\n" +
+                "  'Add task Enable two-factor authentication'\n" +
+                "  'Add task Review privacy settings'\n" +
+                "  'Add task Update all passwords'\n\n" +
                 "Or type it naturally — e.g. 'Remind me to update my antivirus tomorrow'");
             UserInputBox.Focus();
         }
