@@ -62,7 +62,7 @@ namespace CybersecurityChatbot
             _awaitingResumeConfirm = false;
             State = QuizState.InProgress;
 
-            return "🎮 Welcome to the CyberBot Quiz!\n\n" +
+            return "Welcome to the CyberBot Quiz!\n\n" +
                    $"You'll answer {_shuffled.Count} cybersecurity questions.\n" +
                    "Type the letter (A / B / C / D) or True / False to answer.\n" +
                    "Type 'quit quiz' at any time to stop and do something else.\n\n" +
@@ -99,7 +99,7 @@ namespace CybersecurityChatbot
                     lower.Contains("ok") || lower.Contains("sure"))
                 {
                     _awaitingResumeConfirm = false;
-                    return "Great! Let's continue. 👇\n\n" + GetCurrentQuestion();
+                    return "Great! Let's continue. \n\n" + GetCurrentQuestion();
                 }
                 else if (lower.Contains("no") || lower.Contains("stop") ||
                          lower.Contains("quit") || lower.Contains("exit") ||
@@ -113,7 +113,7 @@ namespace CybersecurityChatbot
                     State = QuizState.Idle;
                     _awaitingResumeConfirm = false;
                     return "Quiz paused. I'll pass your message to the chatbot now!\n\n" +
-                           "💡 Type 'start quiz' whenever you want to try again.";
+                           "Type 'start quiz' whenever you want to try again.";
                 }
             }
 
@@ -129,7 +129,7 @@ namespace CybersecurityChatbot
             // The user typed something that isn't A/B/C/D or True/False.
             // Warn them once and ask if they want to pause or keep going.
             _awaitingResumeConfirm = true;
-            return $"⚠️ It looks like \"{trimmed}\" isn't a quiz answer.\n\n" +
+            return $"It looks like \"{trimmed}\" isn't a quiz answer.\n\n" +
                    "Would you like to:\n" +
                    "  • Type 'yes' or 'continue' to keep going with the quiz\n" +
                    "  • Type 'no' or 'quit quiz' to stop and chat normally\n\n" +
@@ -160,8 +160,8 @@ namespace CybersecurityChatbot
             if (correct) _score++;
 
             string feedback = correct
-                ? $"✅ Correct! {q.Explanation}"
-                : $"❌ Incorrect. The correct answer was {q.CorrectAnswer}. {q.Explanation}";
+                ? $"Correct! {q.Explanation}"
+                : $"Incorrect. The correct answer was {q.CorrectAnswer}. {q.Explanation}";
 
             _currentIndex++;
 
@@ -181,7 +181,7 @@ namespace CybersecurityChatbot
             State = QuizState.Idle;
             _awaitingResumeConfirm = false;
             int remaining = _shuffled.Count - _currentIndex;
-            return $"Quiz stopped. ✋\n\n" +
+            return $"Quiz stopped. \n\n" +
                    $"You answered {_currentIndex} of {_shuffled.Count} questions.\n" +
                    $"Score so far: {_score}/{_currentIndex}\n\n" +
                    "You can now ask me anything — or type 'start quiz' to try again from the beginning!";
@@ -200,8 +200,8 @@ namespace CybersecurityChatbot
             string badge = pct >= 80
                 ? "🏆 Great job! You're a cybersecurity pro!"
                 : pct >= 50
-                    ? "👍 Good effort! Keep learning to stay safe online!"
-                    : "📚 Keep learning — cybersecurity knowledge saves you from real threats!";
+                    ? "Good effort! Keep learning to stay safe online!"
+                    : "Keep learning — cybersecurity knowledge saves you from real threats!";
 
             return $"━━━━━━━━━━━━━━━━━━━━━\n" +
                    $"  QUIZ COMPLETE!\n" +
@@ -341,8 +341,8 @@ namespace CybersecurityChatbot
         public string Format(int current, int total)
         {
             string header = Type == QuestionType.TrueFalse
-                ? $"❓ Question {current}/{total}  [True / False]\n\n"
-                : $"❓ Question {current}/{total}  [Multiple Choice]\n\n";
+                ? $"Question {current}/{total}  [True / False]\n\n"
+                : $"Question {current}/{total}  [Multiple Choice]\n\n";
 
             string optionText = string.Join("\n", Options);
             return header + Text + "\n\n" + optionText;
