@@ -89,13 +89,13 @@ namespace CybersecurityChatbot
                 _awaitingName = false;
                 _activityLog.LogNlpAction($"Session started for user: {name}");
 
-                return $"Nice to meet you, {name}! 👋\n\n" +
+                return $"Nice to meet you, {name}! \n\n" +
                        $"I'm here to help you stay safe in the digital world.\n\n" +
                        $"Here's what I can do:\n" +
-                       $"• 💬 Answer questions about cybersecurity topics\n" +
-                       $"• ✅ Manage your cybersecurity tasks — try: 'add task enable 2FA'\n" +
-                       $"• 🎮 Quiz you on cybersecurity — try: 'start quiz'\n" +
-                       $"• 📋 Show your activity log — try: 'show activity log'\n\n" +
+                       $"Answer questions about cybersecurity topics\n" +
+                       $"Manage your cybersecurity tasks — try: 'add task enable 2FA'\n" +
+                       $"Quiz you on cybersecurity — try: 'start quiz'\n" +
+                       $"Show your activity log — try: 'show activity log'\n\n" +
                        $"What would you like to know today, {name}?";
             }
 
@@ -269,13 +269,13 @@ namespace CybersecurityChatbot
             var task = _taskRepo.Add(title, description, hasReminder, reminderDate, reminderText);
             _activityLog.LogTaskAdded(title, reminderText);
 
-            string response = $"✅ Task added!\n\n" +
-                              $"📌 Title: {task.Title}\n" +
-                              $"📝 Description: {task.Description}\n";
+            string response = $"Task added!\n\n" +
+                              $"Title: {task.Title}\n" +
+                              $"Description: {task.Description}\n";
 
             if (hasReminder)
             {
-                response += $"⏰ Reminder: {reminderText}\n\n";
+                response += $"Reminder: {reminderText}\n\n";
                 response += "Your task and reminder have been saved!";
             }
             else
@@ -297,22 +297,22 @@ namespace CybersecurityChatbot
                 return "You have no tasks yet! Try: 'Add task Enable two-factor authentication'";
 
             var sb = new StringBuilder();
-            sb.AppendLine($"📋 Your Cybersecurity Tasks ({tasks.Count} total):\n");
+            sb.AppendLine($"Your Cybersecurity Tasks ({tasks.Count} total):\n");
 
             for (int i = 0; i < tasks.Count; i++)
             {
                 var t = tasks[i];
-                string status = t.IsCompleted ? "✅" : "⏳";
+                string status = t.IsCompleted ? "Completed" : "Processing";
                 sb.AppendLine($"{status} {i + 1}. {t.Title}");
                 sb.AppendLine($"     {t.Description}");
                 if (t.HasReminder && !string.IsNullOrWhiteSpace(t.ReminderText))
-                    sb.AppendLine($"     ⏰ Reminder: {t.ReminderText}");
+                    sb.AppendLine($"     Reminder: {t.ReminderText}");
                 sb.AppendLine();
             }
 
             sb.AppendLine("Commands:");
-            sb.AppendLine("• 'Complete task [number]' — mark as done");
-            sb.AppendLine("• 'Delete task [number]' — remove a task");
+            sb.AppendLine("'Complete task [number]' — mark as done");
+            sb.AppendLine("'Delete task [number]' — remove a task");
 
             return sb.ToString().TrimEnd();
         }
@@ -334,7 +334,7 @@ namespace CybersecurityChatbot
 
             string taskTitle = tasks[num - 1].Title;
             _activityLog.LogTaskCompleted(taskTitle);
-            return $"✅ Great job! Task {num} '{taskTitle}' has been marked as complete!\n\nKeep building those cybersecurity habits!";
+            return $"Great job! Task {num} '{taskTitle}' has been marked as complete!\n\nKeep building those cybersecurity habits!";
         }
 
         private string HandleDeleteTask(string lower)
@@ -354,7 +354,7 @@ namespace CybersecurityChatbot
             string taskTitle = tasks[num - 1].Title;
             _taskRepo.Delete(num);
             _activityLog.LogTaskDeleted(taskTitle);
-            return $"🗑️ Task '{taskTitle}' has been deleted.";
+            return $"Task '{taskTitle}' has been deleted.";
         }
 
         private string HandleSetReminderIntent(string lower)
@@ -384,7 +384,7 @@ namespace CybersecurityChatbot
 
             string taskTitle = tasks[num - 1].Title;
             _activityLog.LogReminderSet(taskTitle, text);
-            return $"⏰ Reminder set for '{taskTitle}': {text}.";
+            return $"Reminder set for '{taskTitle}': {text}.";
         }
 
         // ── Reminder conversation flow ──────────────────────────────────────
@@ -431,7 +431,7 @@ namespace CybersecurityChatbot
             _pendingTaskTitle = string.Empty;
             _pendingTaskIndexForReminder = -1;
 
-            return $"⏰ Got it! I'll remind you {text} about '{taskTitle}'.";
+            return $"Got it! I'll remind you {text} about '{taskTitle}'.";
         }
 
         // ══════════════════════════════════════════════════════════════════════
@@ -461,8 +461,8 @@ namespace CybersecurityChatbot
 
             var sb = new StringBuilder();
             sb.AppendLine(showAll
-                ? $"📋 Full Activity Log ({_activityLog.TotalCount} actions):\n"
-                : $"📋 Recent Activity (last {entries.Count} actions):\n");
+                ? $"Full Activity Log ({_activityLog.TotalCount} actions):\n"
+                : $"Recent Activity (last {entries.Count} actions):\n");
 
             for (int i = 0; i < entries.Count; i++)
             {
@@ -482,21 +482,21 @@ namespace CybersecurityChatbot
         private string BuildHelpMessage()
         {
             var kws = _keywords.GetAllKeywords();
-            return "🤖 I'm CyberBot — here's everything I can help with:\n\n" +
-                   "💬 CYBERSECURITY TOPICS:\n" +
+            return "I'm CyberBot — here's everything I can help with:\n\n" +
+                   "CYBERSECURITY TOPICS:\n" +
                    $"   {string.Join(", ", kws)}\n\n" +
-                   "✅ TASK ASSISTANT:\n" +
-                   "   • 'Add task Enable 2FA'\n" +
-                   "   • 'Show tasks' / 'View my tasks'\n" +
-                   "   • 'Complete task 1'\n" +
-                   "   • 'Delete task 2'\n" +
-                   "   • 'Remind me to update my password tomorrow'\n\n" +
-                   "🎮 QUIZ:\n" +
-                   "   • 'Start quiz' / 'Quiz me'\n\n" +
-                   "📋 ACTIVITY LOG:\n" +
-                   "   • 'Show activity log'\n" +
-                   "   • 'Show full log'\n\n" +
-                   "💡 TIP: You can phrase requests naturally — try:\n" +
+                   "- TASK ASSISTANT:\n" +
+                   "   - 'Add task Enable 2FA'\n" +
+                   "   - 'Show tasks' / 'View my tasks'\n" +
+                   "   - 'Complete task 1'\n" +
+                   "   - 'Delete task 2'\n" +
+                   "   - 'Remind me to update my password tomorrow'\n\n" +
+                   "- QUIZ:\n" +
+                   "   - 'Start quiz' / 'Quiz me'\n\n" +
+                   "- ACTIVITY LOG:\n" +
+                   "   - 'Show activity log'\n" +
+                   "   - 'Show full log'\n\n" +
+                   "- TIP: You can phrase requests naturally — try:\n" +
                    "   'Can you remind me to check my privacy settings?'";
         }
 
@@ -506,7 +506,7 @@ namespace CybersecurityChatbot
             var sb = new StringBuilder();
             for (int i = 0; i < tasks.Count; i++)
             {
-                string status = tasks[i].IsCompleted ? "✅" : "⏳";
+                string status = tasks[i].IsCompleted ? "Completed" : "Processing";
                 sb.AppendLine($"{status} {i + 1}. {tasks[i].Title}");
             }
             return sb.ToString().TrimEnd();
